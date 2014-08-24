@@ -4,7 +4,7 @@ import screen
 
 def main():
 
-	file = open('/home/werner/projets/test_1/Tetris.gb', 'r')
+	file = open('Tetris.gb', 'r')
 	tetris = file.read()
 
 	gb_memory = processor.memory(0xFFFF, tetris)

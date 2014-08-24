@@ -1584,10 +1584,10 @@ class processor:
 
 		else:
 			print "%X - [%02X] Unsupported opcode" % (self.PC, opcode)
-			#self.save_state(filename="/home/werner/projets/test_1/state_crash.sav")
+			#self.save_state(filename="state_crash.sav")
 			sd
 
-	def save_state(self, filename="/home/werner/projets/test_1/state_1.sav"):
+	def save_state(self, filename="state_1.sav"):
 		save_file = open(filename, "w")
 		save_file.write("%X\n" % (self.reg_A))
 		save_file.write("%X\n" % (self.reg_B))
@@ -1608,7 +1608,7 @@ class processor:
 		sdf
 
 	def load_state(self):
-		save_file = open("/home/werner/projets/test_1/state_crash.sav", "r")
+		save_file = open("state_crash.sav", "r")
 		self.reg_A =  int(save_file.readline(), 16)
 		self.reg_B =  int(save_file.readline(), 16)
 		self.reg_C =  int(save_file.readline(), 16)
@@ -1626,7 +1626,7 @@ class processor:
 			self.memory[i] = int(save_file.readline(), 16)
 
 def main():
-	file = open('/home/werner/projets/test_1/Tetris.gb', 'r')
+	file = open('Tetris.gb', 'r')
 	tetris = file.read()
 
 	gameboy = processor(tetris)
