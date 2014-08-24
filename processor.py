@@ -1,6 +1,8 @@
 import struct
 import screen
 import logging
+import pygame
+import time
 
 class memory:
 	def __init__(self, size, cartridge):
@@ -66,20 +68,31 @@ class processor:
 		j = 0x0E
 		#self.load_state()
 
-		while 1:
-			if self.interrupt_enabled:
-				j = (j + 1) % 200
-				if j == 0:
-					self.interrupt()
+		keyLoop = True
+		while keyLoop:	
+			for event in pygame.event.get():
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_ESCAPE:
+						logging.info ( "Escape pressed, exiting" )
+						keyLoop = False
+						pygame.quit()			
 
 
-			#if self.gbscreen.is_stopped():
-			#	self.save_state()
+                        time.sleep(0.001)
+			for x in range(0, 1000):
+                                if self.interrupt_enabled:
+                                        j = (j + 1) % 200
+                                        if j == 0:
+                                                self.interrupt()
 
-			self.interpret_opcode()
-			self.memory[0xFF44] = i
-			i = (i + 1) % 160
-			self.memory[0xFF00] = self.memory[0xFF00] | 0x06
+
+                                #if self.gbscreen.is_stopped():
+                                #	self.save_state()
+
+                                self.interpret_opcode()
+                                self.memory[0xFF44] = i
+                                i = (i + 1) % 160
+                                self.memory[0xFF00] = self.memory[0xFF00] | 0x06
 
 	def interrupt(self):
 		if self.interrupt_enabled:
