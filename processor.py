@@ -3,6 +3,7 @@ import screen
 import logging
 import pygame
 import time
+import ctypes
 
 class memory:
 	def __init__(self, size, cartridge):
@@ -162,20 +163,23 @@ class processor:
 		offset, = struct.unpack("b", chr(self.memory[self.PC+1]))
 
 		logging.info("%X - [%02X] JR NZ %X+ %X		[=%X, flag_z=%X]", self.PC, opcode, self.PC + 2, offset, self.PC + 2 + offset, self.flag_z)
-		self.PC = self.PC + 2
 
 		if self.flag_z == 0:
-			self.PC = self.PC + offset
+			self.PC = self.PC + 2 + offset
+                else:
+                        self.PC = self.PC + 2
+
 
 	# JR Z xx
 	def opcode_0x28(self, opcode):
 
 		offset, = struct.unpack("b", chr(self.memory[self.PC+1]))
 		logging.info("%X - [%02X] JR Z %X+ %X		[=%X]" , self.PC, opcode, self.PC+2, offset, self.PC + 2 + offset)
-		self.PC = self.PC + 2
 
 		if self.flag_z == 1:
-			self.PC = self.PC + offset
+			self.PC = self.PC + 2 + offset
+                else:
+                        self.PC = self.PC + 2
 
 	# JR xx
 	def opcode_0x18(self, opcode):
@@ -190,10 +194,11 @@ class processor:
 		new_adress = self.memory[self.PC+1] + ( self.memory[self.PC+2] << 8 )
 		logging.info("%X - [%02X] JP Z %X" , self.PC, opcode, new_adress)
 
-		self.PC = self.PC + 3
 
 		if self.flag_z == 1:
 			self.PC = new_adress
+                else:
+                        self.PC = self.PC + 3
 
 	# CALL aa bb
 	def opcode_0xCD(self, opcode):
@@ -237,9 +242,10 @@ class processor:
 		self.reg_A = (self.reg_A ^ self.reg_C) & 0xFF
 		logging.info("%X - [%02X] XOR A, C		[A->0x%X]" , self.PC, opcode, self.reg_A)
 
-		self.flag_z = 0
 		if self.reg_A == 0:
 			self.flag_z = 1
+                else:
+                        self.flag_z = 0
 
 		self.flag_n = 0
 		self.flag_h = 0
@@ -302,13 +308,14 @@ class processor:
 		logging.info("%X - [%02X] OR A, C		[A=%X, C=%X]" , self.PC, opcode, self.reg_A, self.reg_C)
 		self.reg_A = self.reg_A | self.reg_C
 
-		self.flag_z = 0
 		self.flag_n = 0
 		self.flag_h = 0
 		self.flag_c = 0
 
 		if self.reg_A == 0:
 			self.flag_z = 1
+                else:
+                        self.flag_z = 0
 
 		self.PC = self.PC + 1
 
@@ -317,13 +324,14 @@ class processor:
 		logging.info("%X - [%02X] OR A, B		[A=%X, B=%X]" , self.PC, opcode, self.reg_A, self.reg_B)
 		self.reg_A = self.reg_A | self.reg_B
 
-		self.flag_z = 0
 		self.flag_n = 0
 		self.flag_h = 0
 		self.flag_c = 0
 
 		if self.reg_A == 0:
 			self.flag_z = 1
+                else:
+                        self.flag_z = 0
 
 		self.PC = self.PC + 1
 
@@ -333,13 +341,14 @@ class processor:
 
 		self.reg_A = self.reg_A & self.memory[self.PC+1]
 
-		self.flag_z = 0
 		self.flag_n = 0
 		self.flag_c = 0
 		self.flag_h = 1
 
 		if self.reg_A == 0:
 			self.flag_z = 1
+                else:
+                        self.flag_z = 0
 
 		self.PC = self.PC + 2
 
@@ -363,13 +372,14 @@ class processor:
 
 		self.reg_A = self.reg_A & self.reg_C
 
-		self.flag_z = 0
 		self.flag_n = 0
 		self.flag_c = 0
 		self.flag_h = 1
 
 		if self.reg_A == 0:
 			self.flag_z = 1
+                else:
+                        self.flag_z = 0
 
 		self.PC = self.PC + 1
 
@@ -384,13 +394,14 @@ class processor:
 
 			logging.info("%X - [%02X-%02X] SWAP A		[A->0x%X]" , self.PC, opcode, real_code, self.reg_A)
 
-			self.flag_z = 0
 			self.flag_n = 0
 			self.flag_h = 0
 			self.flag_c = 0
 
 			if self.reg_A == 0:
 				self.flag_z = 1
+                        else:
+                                self.flag_z = 0
 
 			self.PC = self.PC + 2
 
@@ -402,14 +413,16 @@ class processor:
 
 			self.reg_A = temp & 0xFF
 
-			self.flag_z = 0
-			self.flag_c = 0
 
 			if self.reg_A == 0:
 				self.flag_z = 1
+                        else:
+                                self.flag_z = 0
 
 			if temp & 0x100 != 0:
 				self.flag_c = 1
+                        else:
+                                self.flag_c = 0
 
 			self.PC = self.PC + 2
 
@@ -463,9 +476,10 @@ class processor:
 		elif real_code == 0x50:
 			value = self.reg_B & 0x4
 
-			self.flag_z = 0
 			if value == 0:
 				self.flag_z = 1
+                        else:
+                                self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 2, B		[B=%X, value=%X, flag_z=%X]" , self.PC, opcode, real_code, self.reg_B, value, self.flag_z)
 
@@ -475,9 +489,10 @@ class processor:
 		elif real_code == 0x60:
 			value = self.reg_B & 0x10
 
-			self.flag_z = 0
 			if value == 0:
 				self.flag_z = 1
+                        else:
+                                self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 4, B		[B=%X]" , self.PC, opcode, real_code, self.reg_B)
 
@@ -499,9 +514,10 @@ class processor:
 		elif real_code == 0x68:
 			value = self.reg_B & 0x20
 
-			self.flag_z = 0
 			if value == 0:
 				self.flag_z = 1
+                        else:
+                                self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 5, B		[B=%X]" , self.PC, opcode, real_code, self.reg_B)
 
@@ -523,9 +539,10 @@ class processor:
 		elif real_code == 0x6F:
 			value = self.reg_A & 0x20
 
-			self.flag_z = 0
 			if value == 0:
 				self.flag_z = 1
+                        else:
+                                self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 5, A		[A=%X]" , self.PC, opcode, real_code, self.reg_A)
 
@@ -535,9 +552,10 @@ class processor:
 		elif real_code == 0x77:
 			value = self.reg_A & 0x40
 
-			self.flag_z = 0
 			if value == 0:
 				self.flag_z = 1
+                        else:
+                                self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 6, A		[B=%X]" , self.PC, opcode, real_code, self.reg_A)
 
@@ -554,9 +572,10 @@ class processor:
 		elif real_code == 0x7F:
 			value = self.reg_A & 0x80
 
-			self.flag_z = 0
 			if value == 0:
 				self.flag_z = 1
+                        else:
+                                self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 7, A		[B=%X]" , self.PC, opcode, real_code, self.reg_A)
 
@@ -567,9 +586,10 @@ class processor:
 		elif real_code == 0x58:
 			value = self.reg_B & 0x8
 
-			self.flag_z = 0
 			if value == 0:
 				self.flag_z = 1
+                        else:
+                                self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 3, B		[B=%X]" , self.PC, opcode, real_code, self.reg_B)
 
