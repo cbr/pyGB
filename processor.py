@@ -70,13 +70,13 @@ class processor:
 		#self.load_state()
 
 		keyLoop = True
-		while keyLoop:	
+		while keyLoop:
 			for event in pygame.event.get():
 				if event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_ESCAPE:
 						logging.info ( "Escape pressed, exiting" )
 						keyLoop = False
-						pygame.quit()			
+						pygame.quit()
 
 
 			time.sleep(0.001)
@@ -166,8 +166,8 @@ class processor:
 
 		if self.flag_z == 0:
 			self.PC = self.PC + 2 + offset
-                else:
-                        self.PC = self.PC + 2
+		else:
+			self.PC = self.PC + 2
 
 
 	# JR Z xx
@@ -178,8 +178,8 @@ class processor:
 
 		if self.flag_z == 1:
 			self.PC = self.PC + 2 + offset
-                else:
-                        self.PC = self.PC + 2
+		else:
+			self.PC = self.PC + 2
 
 	# JR xx
 	def opcode_0x18(self, opcode):
@@ -197,8 +197,8 @@ class processor:
 
 		if self.flag_z == 1:
 			self.PC = new_adress
-                else:
-                        self.PC = self.PC + 3
+		else:
+			self.PC = self.PC + 3
 
 	# CALL aa bb
 	def opcode_0xCD(self, opcode):
@@ -244,8 +244,8 @@ class processor:
 
 		if self.reg_A == 0:
 			self.flag_z = 1
-                else:
-                        self.flag_z = 0
+		else:
+			self.flag_z = 0
 
 		self.flag_n = 0
 		self.flag_h = 0
@@ -314,8 +314,8 @@ class processor:
 
 		if self.reg_A == 0:
 			self.flag_z = 1
-                else:
-                        self.flag_z = 0
+		else:
+			self.flag_z = 0
 
 		self.PC = self.PC + 1
 
@@ -330,8 +330,8 @@ class processor:
 
 		if self.reg_A == 0:
 			self.flag_z = 1
-                else:
-                        self.flag_z = 0
+		else:
+			self.flag_z = 0
 
 		self.PC = self.PC + 1
 
@@ -347,8 +347,8 @@ class processor:
 
 		if self.reg_A == 0:
 			self.flag_z = 1
-                else:
-                        self.flag_z = 0
+		else:
+			self.flag_z = 0
 
 		self.PC = self.PC + 2
 
@@ -378,8 +378,8 @@ class processor:
 
 		if self.reg_A == 0:
 			self.flag_z = 1
-                else:
-                        self.flag_z = 0
+		else:
+			self.flag_z = 0
 
 		self.PC = self.PC + 1
 
@@ -400,8 +400,8 @@ class processor:
 
 			if self.reg_A == 0:
 				self.flag_z = 1
-                        else:
-                                self.flag_z = 0
+			else:
+				self.flag_z = 0
 
 			self.PC = self.PC + 2
 
@@ -416,13 +416,13 @@ class processor:
 
 			if self.reg_A == 0:
 				self.flag_z = 1
-                        else:
-                                self.flag_z = 0
+			else:
+				self.flag_z = 0
 
 			if temp & 0x100 != 0:
 				self.flag_c = 1
-                        else:
-                                self.flag_c = 0
+			else:
+				self.flag_c = 0
 
 			self.PC = self.PC + 2
 
@@ -478,8 +478,8 @@ class processor:
 
 			if value == 0:
 				self.flag_z = 1
-                        else:
-                                self.flag_z = 0
+			else:
+				self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 2, B		[B=%X, value=%X, flag_z=%X]" , self.PC, opcode, real_code, self.reg_B, value, self.flag_z)
 
@@ -491,8 +491,8 @@ class processor:
 
 			if value == 0:
 				self.flag_z = 1
-                        else:
-                                self.flag_z = 0
+			else:
+				self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 4, B		[B=%X]" , self.PC, opcode, real_code, self.reg_B)
 
@@ -516,8 +516,8 @@ class processor:
 
 			if value == 0:
 				self.flag_z = 1
-                        else:
-                                self.flag_z = 0
+			else:
+				self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 5, B		[B=%X]" , self.PC, opcode, real_code, self.reg_B)
 
@@ -541,8 +541,8 @@ class processor:
 
 			if value == 0:
 				self.flag_z = 1
-                        else:
-                                self.flag_z = 0
+			else:
+				self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 5, A		[A=%X]" , self.PC, opcode, real_code, self.reg_A)
 
@@ -554,8 +554,8 @@ class processor:
 
 			if value == 0:
 				self.flag_z = 1
-                        else:
-                                self.flag_z = 0
+			else:
+				self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 6, A		[B=%X]" , self.PC, opcode, real_code, self.reg_A)
 
@@ -574,8 +574,8 @@ class processor:
 
 			if value == 0:
 				self.flag_z = 1
-                        else:
-                                self.flag_z = 0
+			else:
+				self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 7, A		[B=%X]" , self.PC, opcode, real_code, self.reg_A)
 
@@ -588,8 +588,8 @@ class processor:
 
 			if value == 0:
 				self.flag_z = 1
-                        else:
-                                self.flag_z = 0
+			else:
+				self.flag_z = 0
 
 			logging.info("%X - [%02X-%02X] BIT 3, B		[B=%X]" , self.PC, opcode, real_code, self.reg_B)
 
@@ -793,7 +793,7 @@ class processor:
 
 	# LDD A => mem[HL]
 	def opcode_0x77(self, opcode):
-		self.memory[self.reg_HL] = self.reg_A 
+		self.memory[self.reg_HL] = self.reg_A
 		logging.info("%X - [%02X] LD (HL), A		[HL=0x%X, A=0x%X]" , self.PC, opcode, self.reg_HL, self.reg_A)
 		self.PC = self.PC + 1
 
@@ -1611,7 +1611,7 @@ class processor:
 		else:
 			self.PC = self.PC + 1
 
-        opcodes_function = {
+	opcodes_function = {
 		0x00 : opcode_0x00,
 		0xEF : opcode_0xEF,
 #		0xFF : opcode_0xFF,
@@ -1737,11 +1737,11 @@ class processor:
 
 	def interpret_opcode(self):
 		opcode = self.memory[self.PC]
-                self.opcodes_function[opcode](self, opcode)
+		self.opcodes_function[opcode](self, opcode)
 	# else:
-	# 	logging.info("%X - [%02X] Unsupported opcode" , self.PC, opcode)
-	# 	#self.save_state(filename="state_crash.sav")
-	# 	sd
+	#	logging.info("%X - [%02X] Unsupported opcode" , self.PC, opcode)
+	#	#self.save_state(filename="state_crash.sav")
+	#	sd
 
 
 	def save_state(self, filename="state_1.sav"):
@@ -1791,6 +1791,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
