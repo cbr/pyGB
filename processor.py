@@ -1,13 +1,13 @@
 import struct
 import screen
 import logging
-import pygame
 import time
 import ctypes
 
 class memory:
 	def __init__(self, size, cartridge):
 		self.memory = []
+		self.tiles_changes = False
 		for i in range(0,0x10000):
 			self.memory.append(0)
 
@@ -16,10 +16,12 @@ class memory:
 
 	def __setitem__(self, offset, value):
 		if offset < 0x8000:
-			logging.info("illlegal write access to address %X", offset)
+			logging.error("illlegal write access to address %X", offset)
 			return
 
 		self.memory[offset] = value
+		if offset < 0x9800:
+			self.tiles_changes = True
 		if offset >= 0xFF00 and offset <= 0xFF70 and offset != 0xFF44 and offset != 0xFF00:
 			logging.info("################# CALL Special Register %X = %X", offset, value)
 
@@ -69,16 +71,7 @@ class processor:
 		j = 0x0E
 		#self.load_state()
 
-		keyLoop = True
-		while keyLoop:
-			for event in pygame.event.get():
-				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_ESCAPE:
-						logging.info ( "Escape pressed, exiting" )
-						keyLoop = False
-						pygame.quit()
-
-
+		while not(self.gbscreen.stopped):
 			time.sleep(0.001)
 			for x in range(0, 1000):
 				if self.interrupt_enabled:
