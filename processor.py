@@ -72,21 +72,19 @@ class processor:
 		#self.load_state()
 
 		while not(self.gbscreen.stopped):
-			time.sleep(0.001)
-			for x in range(0, 1000):
-				if self.interrupt_enabled:
-					j = (j + 1) % 200
-					if j == 0:
-						self.interrupt()
+			if self.interrupt_enabled:
+				j = (j + 1) % 200
+				if j == 0:
+					self.interrupt()
 
 
-				#if self.gbscreen.is_stopped():
-				#	self.save_state()
+			#if self.gbscreen.is_stopped():
+			#	self.save_state()
 
-				self.interpret_opcode()
-				self.memory[0xFF44] = i
-				i = (i + 1) % 160
-				self.memory[0xFF00] = self.memory[0xFF00] | 0x06
+			self.interpret_opcode()
+			self.memory[0xFF44] = i
+			i = (i + 1) % 160
+			self.memory[0xFF00] = self.memory[0xFF00] | 0x06
 
 	def interrupt(self):
 		if self.interrupt_enabled:
